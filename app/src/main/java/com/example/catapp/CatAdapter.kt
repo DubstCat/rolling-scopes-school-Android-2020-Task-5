@@ -3,7 +3,9 @@ package com.example.catapp
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.example.catapp.data.Cat
 import com.example.catapp.databinding.CatItemBinding
 
@@ -28,6 +30,11 @@ class CatAdapter(val cats:List<Cat>): RecyclerView.Adapter<CatAdapter.CatViewHol
 
     override fun onBindViewHolder(holder: CatViewHolder, position: Int) {
         holder.bind(cats[position])
+        val imageView = holder.itemView.findViewById<ImageView>(R.id.image_fullscreen)
+        Glide
+            .with(holder.itemView.context)
+            .load(cats[position].url)
+            .into(imageView)
         holder.itemView.setOnClickListener(View.OnClickListener {
             holder.onClick(holder.itemView)
         })

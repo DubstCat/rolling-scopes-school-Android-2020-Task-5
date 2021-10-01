@@ -8,6 +8,9 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        supportFragmentManager.beginTransaction()
+            .add(R.id.main_fragment, ListFragment::class.java, null)
+            .commit()
 
         // Это код для скачивания файла
 
