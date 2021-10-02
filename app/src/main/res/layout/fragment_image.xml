@@ -3,10 +3,6 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <data>
-
-    </data>
-
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -16,8 +12,7 @@
             android:layout_gravity="center"
             android:layout_width="300dp"
             android:layout_height="300dp"
-            android:id="@+id/image_fullscreen"
-            android:contentDescription="cat" />
+            android:id="@+id/image_fullscreen" />
 
         <Button
             android:layout_width="wrap_content"

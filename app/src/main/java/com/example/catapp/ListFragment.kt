@@ -7,8 +7,8 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.example.catapp.data.Cat
-import com.example.catapp.databinding.FragmentListBinding
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -17,8 +17,9 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 
 class ListFragment : Fragment(){
-    lateinit var binding:FragmentListBinding
     lateinit var cats: MutableList<Cat>
+    lateinit var rvCats:RecyclerView
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -29,8 +30,6 @@ class ListFragment : Fragment(){
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding = FragmentListBinding.inflate(layoutInflater)
-        binding.rvCats.layoutManager = LinearLayoutManager(context)
 
         val retrofit: Retrofit = Retrofit.Builder()
             .baseUrl("https://api.thecatapi.com/")
@@ -39,19 +38,26 @@ class ListFragment : Fragment(){
 
         val catApi = retrofit.create(CatApi::class.java)
         val call = catApi.getData(20)
-        callRetrofit(call)
-
-    }
-
-    fun <T> callRetrofit(call:Call<T>){
-        call.enqueue(object :Callback<T>{
-            override fun onResponse(call: Call<T>, response: Response<T>) {
-                cats = response.body() as MutableList<Cat>
-                binding.rvCats.adapter = CatAdapter(cats)
+        rvCats = view.findViewById(R.id.rvCats)
+        rvCats.layoutManager = LinearLayoutManager(context)
+        call.enqueue(object:Callback<MutableList<Cat>>{
+            override fun onResponse(call: Call<MutableList<Cat>>, response: Response<MutableList<Cat>>) {
+                val responseBody = response.body()!!
+                cats = responseBody
+                val adapter = CatAdapter(cats)
+                adapter.context = context!!
+                rvCats.adapter = adapter
             }
-            override fun onFailure(call: Call<T>, t: Throwable) {
-                Log.d("TAG", "retrofit failed")
+
+            override fun onFailure(call: Call<MutableList<Cat>>, t: Throwable) {
+
             }
+
         })
+
     }
+
+
+
+
 }

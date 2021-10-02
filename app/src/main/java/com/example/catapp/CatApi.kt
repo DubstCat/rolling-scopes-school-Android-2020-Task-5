@@ -2,6 +2,7 @@ package com.example.catapp
 
 
 import com.example.catapp.data.Cat
+import com.example.catapp.data.JSONResponse
 import retrofit2.Call
 import retrofit2.http.GET
 import retrofit2.http.Query
