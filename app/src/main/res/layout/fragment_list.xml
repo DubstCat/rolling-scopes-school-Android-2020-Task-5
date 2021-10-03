@@ -7,10 +7,29 @@
         android:layout_height="match_parent"
         tools:context=".ListFragment">
 
-        <androidx.recyclerview.widget.RecyclerView
+        <androidx.core.widget.NestedScrollView
+            android:id="@+id/nsvCats"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:id="@+id/rvCats"/>
+            android:layout_height="match_parent">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:id="@+id/rvCats"/>
+
+            <ProgressBar
+                android:id="@+id/progressBar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+        </androidx.core.widget.NestedScrollView>
+
+
 
     </FrameLayout>
 </layout>

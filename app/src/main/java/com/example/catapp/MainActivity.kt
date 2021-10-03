@@ -12,13 +12,16 @@ class MainActivity : AppCompatActivity() {
             .add(R.id.main_fragment, ListFragment::class.java, null)
             .commit()
 
-        // Это код для скачивания файла
+    }
 
-        /*val filename = url.substringAfterLast("/")
-        val request = DownloadManager.Request(Uri.parse(url))
-            .setTitle(filename)
-            .setDestinationInExternalFilesDir(context, context.getString(R.string.app_name), filename)
-        (context.getSystemService(Context.DOWNLOAD_SERVICE) as DownloadManager)
-            .enqueue(request)*/
+    fun openFullscreenFragment(byteArray: ByteArray){
+        supportFragmentManager.beginTransaction()
+            .replace(R.id.main_fragment, ImageFragment.newInstance(byteArray))
+            .setCustomAnimations(
+                R.animator.card_flip_right_in,
+                R.animator.card_flip_right_out,
+                R.animator.card_flip_left_in,
+                R.animator.card_flip_left_out)
+            .commit()
     }
 }

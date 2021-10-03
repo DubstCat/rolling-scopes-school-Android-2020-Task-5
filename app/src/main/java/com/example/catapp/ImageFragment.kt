@@ -1,5 +1,6 @@
 package com.example.catapp
 
+import android.graphics.BitmapFactory
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -7,17 +8,17 @@ import android.view.View
 import android.view.ViewGroup
 import com.example.catapp.databinding.FragmentImageBinding
 
-private const val URL_PARAM = "url_param"
+private const val IMAGE_PARAM = "url_param"
 
 class ImageFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var url_param: String? = null
+
+    private var image_param: ByteArray? = null
     lateinit var binding:FragmentImageBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
-            url_param = it.getString(URL_PARAM)
+            image_param = it.getByteArray(IMAGE_PARAM)
 
         }
     }
@@ -32,7 +33,17 @@ class ImageFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding
+        binding.imageFullscreen.setImageBitmap(BitmapFactory.decodeByteArray(image_param, 0, image_param!!.size))
+        binding.btnDownload.setOnClickListener{
+            // Это код для скачивания файла
+
+            /*val filename = url.substringAfterLast("/")
+            val request = DownloadManager.Request(Uri.parse(url))
+                .setTitle(filename)
+                .setDestinationInExternalFilesDir(context, context.getString(R.string.app_name), filename)
+            (context.getSystemService(Context.DOWNLOAD_SERVICE) as DownloadManager)
+                .enqueue(request)*/
+        }
     }
 
     companion object {
@@ -40,14 +51,14 @@ class ImageFragment : Fragment() {
          * Use this factory method to create a new instance of
          * this fragment using the provided parameters.
          *
-         * @param url_param URL parameter.
+         * @param image_param ByteArray parameter.
          * @return A new instance of fragment ImageFragment.
          */
         @JvmStatic
-        fun newInstance(url_param: String) =
+        fun newInstance(imageByteArray: ByteArray) =
             ImageFragment().apply {
                 arguments = Bundle().apply {
-                    putString(URL_PARAM, url_param)
+                    putByteArray(IMAGE_PARAM, imageByteArray)
                 }
             }
     }

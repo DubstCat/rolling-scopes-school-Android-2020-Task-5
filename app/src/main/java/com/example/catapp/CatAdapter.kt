@@ -10,7 +10,7 @@ import com.bumptech.glide.Glide
 import com.example.catapp.data.Cat
 
 
-class CatAdapter(val cats:List<Cat>): RecyclerView.Adapter<CatAdapter.CatViewHolder>() {
+class CatAdapter(val cats: MutableList<Cat>): RecyclerView.Adapter<CatAdapter.CatViewHolder>() {
     private var onClickListener: OnImageClickListener? = null
     public lateinit var context:Context
     inner class CatViewHolder(view:View) : RecyclerView.ViewHolder(view), View.OnClickListener {
@@ -22,7 +22,6 @@ class CatAdapter(val cats:List<Cat>): RecyclerView.Adapter<CatAdapter.CatViewHol
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CatViewHolder {
         val view = LayoutInflater.from(context).inflate(R.layout.cat_item, parent, false)
-
         return CatViewHolder(view)
     }
 
@@ -40,6 +39,13 @@ class CatAdapter(val cats:List<Cat>): RecyclerView.Adapter<CatAdapter.CatViewHol
 
     override fun getItemCount(): Int {
         return cats.size
+    }
+    fun appendCats(cats:MutableList<Cat>){
+        this.cats.addAll(cats)
+    }
+
+    fun getCatList():MutableList<Cat>{
+        return cats
     }
 
 }
