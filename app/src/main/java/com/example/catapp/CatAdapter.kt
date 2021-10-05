@@ -37,15 +37,13 @@ class CatAdapter(val cats: MutableList<Cat>): RecyclerView.Adapter<CatAdapter.Ca
         })
     }
 
-    override fun getItemCount(): Int {
-        return cats.size
-    }
+    override fun getItemCount(): Int = cats.size
+
     fun appendCats(cats:MutableList<Cat>){
         this.cats.addAll(cats)
     }
 
-    fun getCatList():MutableList<Cat>{
-        return cats
-    }
+    fun getCatList():MutableList<Cat> = cats
+
 
 }
