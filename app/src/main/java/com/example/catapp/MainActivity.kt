@@ -14,14 +14,4 @@ class MainActivity : AppCompatActivity() {
 
     }
 
-    fun openFullscreenFragment(byteArray: ByteArray){
-        supportFragmentManager.beginTransaction()
-            .replace(R.id.main_fragment, ImageFragment.newInstance(byteArray))
-            .setCustomAnimations(
-                R.animator.card_flip_right_in,
-                R.animator.card_flip_right_out,
-                R.animator.card_flip_left_in,
-                R.animator.card_flip_left_out)
-            .commit()
-    }
 }

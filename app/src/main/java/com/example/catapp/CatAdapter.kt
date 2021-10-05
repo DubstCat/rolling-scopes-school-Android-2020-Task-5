@@ -1,23 +1,41 @@
 package com.example.catapp
 
+import android.app.Activity
 import android.content.Context
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AdapterView
 import android.widget.ImageView
+import android.widget.Toast
+import androidx.core.app.ActivityOptionsCompat
+import androidx.core.view.ViewCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.catapp.data.Cat
 
 
-class CatAdapter(val cats: MutableList<Cat>): RecyclerView.Adapter<CatAdapter.CatViewHolder>() {
-    private var onClickListener: OnImageClickListener? = null
-    public lateinit var context:Context
-    inner class CatViewHolder(view:View) : RecyclerView.ViewHolder(view), View.OnClickListener {
+class CatAdapter(val cats: MutableList<Cat>,
+                 val context: Context,
+                 val activity:Activity)
+    : RecyclerView.Adapter<CatAdapter.CatViewHolder>() {
 
-        override fun onClick(p0: View?) {
-            onClickListener!!.onImageClick(bindingAdapterPosition, p0)
+    inner class CatViewHolder(view:View) : RecyclerView.ViewHolder(view),View.OnClickListener {
+        var imageView:View ?=null
+        fun setImage(img:View){
+            imageView=img
         }
+        override fun onClick(v: View?) {
+            val intent = Intent(activity, ImageActivity::class.java)
+            val options = ActivityOptionsCompat.makeSceneTransitionAnimation(activity, imageView!!, ViewCompat.getTransitionName(imageView!!)!!)
+            intent.putExtra(cats[bindingAdapterPosition].url,"URL")
+            activity.startActivity(intent, options.toBundle())
+
+        }
+    init {
+        itemView.setOnClickListener(this)
+    }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CatViewHolder {
@@ -27,23 +45,15 @@ class CatAdapter(val cats: MutableList<Cat>): RecyclerView.Adapter<CatAdapter.Ca
 
     override fun onBindViewHolder(holder: CatViewHolder, position: Int) {
         val imageView = holder.itemView.findViewById<ImageView>(R.id.cat_image)
+        imageView.load(cats[position].url?:"")
+        holder.setImage(imageView)
 
-        Glide
-            .with(holder.itemView.context)
-            .load(cats[position].url)
-            .into(imageView)
-        holder.itemView.setOnClickListener(View.OnClickListener {
-            holder.onClick(holder.itemView)
-        })
     }
 
     override fun getItemCount(): Int = cats.size
 
-    fun appendCats(cats:MutableList<Cat>){
-        this.cats.addAll(cats)
-    }
-
     fun getCatList():MutableList<Cat> = cats
+
 
 
 }

@@ -2,6 +2,7 @@ package com.example.catapp
 
 
 import android.os.Bundle
+import android.transition.TransitionInflater
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -14,14 +15,12 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.catapp.data.Cat
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
-
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
-import java.util.logging.Level
 
 
 class ListFragment : Fragment(){
@@ -33,6 +32,7 @@ class ListFragment : Fragment(){
     lateinit var progressBar: ProgressBar
     var page = 1
     val limit = 20
+    var cats:MutableList<Cat> = mutableListOf()
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -43,37 +43,29 @@ class ListFragment : Fragment(){
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         rvCats = view.findViewById(R.id.rvCats)
         nsvCats = view.findViewById(R.id.nsvCats)
         progressBar = view.findViewById(R.id.progressBar)
         rvCats.layoutManager = LinearLayoutManager(context)
+        adapter = CatAdapter(mutableListOf(),requireContext(), requireActivity())
 
-        refreshList()
+
+        getData()
 
         nsvCats.setOnScrollChangeListener(NestedScrollView.OnScrollChangeListener { v, scrollX, scrollY, oldScrollX, oldScrollY ->
             if (scrollY == v!!.getChildAt(0).measuredHeight - v.measuredHeight){
                 progressBar.visibility = View.VISIBLE
-                appendList()
+                page++
+                getData()
+
             }
         })
+
     }
 
-    fun appendList(){
-        adapter = CatAdapter(adapter.cats.apply {addAll(getData())})
-        adapter.context = requireContext()
-        rvCats.adapter = adapter
-    }
 
-    fun refreshList(){
-        adapter = CatAdapter(getData())
-        adapter.context = requireContext()
-        rvCats.adapter = adapter
-    }
 
-    private fun getData():MutableList<Cat>{
-        var cats:MutableList<Cat>?=null
-
+    private fun getData(){
         val logger = HttpLoggingInterceptor().also { it.level = HttpLoggingInterceptor.Level.BODY }
 
         val okHttpClient: OkHttpClient = OkHttpClient().newBuilder()
@@ -92,16 +84,19 @@ class ListFragment : Fragment(){
         }
 
         retrofit
-            .getData(limit)
+            .getData(limit, page)
             .enqueue(object:Callback<MutableList<Cat>>{
             override fun onResponse(call: Call<MutableList<Cat>>, response: Response<MutableList<Cat>>) {
                 progressBar.visibility = View.GONE
-                cats = response.body()
+                Log.d("RETRO",response.body().toString())
+                cats.addAll(response.body()!!)
+                rvCats.adapter = CatAdapter(cats,requireContext(), requireActivity())
+                //adapter.notifyDataSetChanged()
             }
             override fun onFailure(call: Call<MutableList<Cat>>, t: Throwable) {
                 Log.d("RETRO","FAILED")
             }
         })
-        return cats!!
+
     }
 }

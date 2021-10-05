@@ -18,7 +18,7 @@ interface CatApi {
     @GET("images/search")
     fun getData(
         @Query("limit")limit:Int,
-        @Query("page")page:Int = 1,
+        @Query("page")page:Int,
 
     ): Call<MutableList<Cat>>
 
