@@ -27,10 +27,10 @@ class CatAdapter(val cats: MutableList<Cat>,
             imageView=img
         }
         override fun onClick(v: View?) {
-            val intent = Intent(activity, ImageActivity::class.java)
+            val intent = Intent(context, ImageActivity::class.java)
             val options = ActivityOptionsCompat.makeSceneTransitionAnimation(activity, imageView!!, ViewCompat.getTransitionName(imageView!!)!!)
-            intent.putExtra(cats[bindingAdapterPosition].url,"URL")
-            activity.startActivity(intent, options.toBundle())
+            intent.putExtra("URL",cats[bindingAdapterPosition].url)
+            context.startActivity(intent, options.toBundle())
 
         }
     init {
@@ -49,11 +49,5 @@ class CatAdapter(val cats: MutableList<Cat>,
         holder.setImage(imageView)
 
     }
-
     override fun getItemCount(): Int = cats.size
-
-    fun getCatList():MutableList<Cat> = cats
-
-
-
 }

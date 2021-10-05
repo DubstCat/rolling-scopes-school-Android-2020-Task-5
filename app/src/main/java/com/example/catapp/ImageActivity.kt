@@ -9,6 +9,7 @@ import android.os.Environment
 import android.transition.ChangeBounds
 import android.transition.ChangeImageTransform
 import android.transition.TransitionSet
+import android.widget.Button
 import android.widget.ImageView
 import androidx.core.transition.doOnEnd
 
@@ -18,10 +19,15 @@ class ImageActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_image)
         val image = findViewById<ImageView>(R.id.image_fullscreen)
-        val url = intent.extras!!.getString(URL_KEY)
+        val btnDownload = findViewById<Button>(R.id.btn_download)
+        val url = intent.getStringExtra(URL_KEY)?:""
+
+        btnDownload.setOnClickListener{
+            downloadCatImageFromNet(url,applicationContext)
+        }
 
         supportPostponeEnterTransition()
-        image.load(url!!){
+        image.load(url){
             supportStartPostponedEnterTransition()
         }
         window.sharedElementEnterTransition = TransitionSet()
